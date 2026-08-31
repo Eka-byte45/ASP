@@ -1,0 +1,43 @@
+﻿@page "/Power"
+@rendermode InteractiveServer
+
+
+<h3>Power</h3>
+<input type="number" @bind="baseNumber" @bind:after="CalculatePower"/>
+<input type="number" @bind="exponent" @bind:after="CalculatePower"/>
+<h3>a в степени b = @result </h3>
+<button class="btn btn-primary" @onclick="CalculatePower">Calculate</button>
+@code {
+
+    int baseNumber;
+    int exponent;
+    double result;
+
+    void CalculatePower()
+    {
+        result = 1;
+        if(exponent == 0)
+        {
+            result = 1;
+        }
+        if(exponent < 0)
+        {
+            int plus = - exponent;
+
+            for (int i = 1; i <= plus; i++)
+            {
+                result *= baseNumber;
+            }
+            result = 1 / result;
+        }
+        
+        else
+        {
+            for(int i = 1; i <= exponent;i++)
+            {
+                 result *= baseNumber;
+            }   
+        }
+    }
+
+}

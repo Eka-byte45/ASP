@@ -1,0 +1,28 @@
+﻿@page "/Fibonacci"
+@rendermode InteractiveServer
+@using System.Numerics;
+
+<h3>Fibonacci</h3>
+<input type="number" @bind="number" @bind:after="CalculateFibonacci"/>
+<h3>Ряд Фибоначчи: @DisplayResult()</h3>
+<button class="btn btn-primary" @onclick="CalculateFibonacci">Calculate</button>
+@code {
+    int number;
+    BigInteger []? result;
+
+    void CalculateFibonacci()
+    {
+        if (number <= 0) return;
+        result = new BigInteger[number];
+        if(number > 0) result[0]=0;
+        if (number > 1) result[1] = 1;
+        for(int i = 2;i < number; i++)
+        {
+            result[i] = result[i - 1] + result[i - 2];
+        }
+    }
+    string DisplayResult()
+    {
+        return result == null ? "" : string.Join(", ", result);
+    }
+}
