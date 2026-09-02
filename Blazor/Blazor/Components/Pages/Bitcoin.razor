@@ -1,6 +1,5 @@
 ﻿@page "/bitcoin"
 @rendermode InteractiveServer
-@inject IJSRuntime JS
 
 <h3>Bitcoin</h3>
 
@@ -8,7 +7,7 @@
     <h2>Содержание</h2>
     <ul>
         <li>
-            <a href="#section-1" @onclick:preventDefault>Что такое биткоин</a>
+            <a href="/bitcoin#section-1">Что такое биткоин</a>
         </li>
         <li>
             <a href="#section-2" @onclick:preventDefault>Как работает блокчейн</a>
@@ -20,13 +19,13 @@
             <a href="#section-4" @onclick:preventDefault>Как происходят транзакции с биткоинами</a>
         </li>
         <li>
-            <a href="#section-5" @onclick:preventDefault>Особенности хранения биткоинов</a>
+            <a href="/bitcoin#section-5" @onclick:preventDefault>Особенности хранения биткоинов</a>
         </li>
         <li>
             <a href="#section-6" @onclick:preventDefault>Почему биткоин не имеет центрального органа управления</a>
         </li>
         <li>
-            <a href="#section-7" @onclick:preventDefault>Преимущества и недостатки биткоина</a>
+            <a href="/bitcoin#section-7" @onclick:preventDefault>Преимущества и недостатки биткоина</a>
         </li>
     </ul>
     <section id="section-1">
