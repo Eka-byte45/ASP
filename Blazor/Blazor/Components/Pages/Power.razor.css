@@ -1,0 +1,12 @@
+﻿.power {
+    display: flex;
+}
+
+    .power input {
+        width: 64px;
+        margin:16px 16px;
+    }
+
+    .power h3 {
+        margin: 16px 16px;
+    }
