@@ -1,0 +1,13 @@
+﻿.details-container 
+{
+    display: flex;
+}
+dt
+{
+    float:left;
+    width:30%
+}
+dd
+{
+    width:50%;
+}
