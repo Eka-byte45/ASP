@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("AcademyContext") ?? throw new InvalidOperationException("Connection string 'AcademyContext' not found.");
 
-builder.Services.AddDbContextFactory<AcademyContext>(options => options.UseSqlServer(connectionString));
+//builder.Services.AddDbContextFactory<AcademyContext>(options => options.UseSqlServer(connectionString));
 
 builder.Services.AddQuickGridEntityFrameworkAdapter();
 
