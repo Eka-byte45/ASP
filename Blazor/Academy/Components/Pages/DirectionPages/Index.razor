@@ -5,6 +5,7 @@
 @implements IAsyncDisposable
 @inject IDbContextFactory<AcademyContext> DbFactory
 @inject NavigationManager NavigationManager
+@rendermode InteractiveServer
 
 <PageTitle>Index</PageTitle>
 
@@ -14,18 +15,41 @@
     <a href="directions/create">Create New</a>
 </p>
 
-<QuickGrid Class="table" Items="context.Directions">
-    <PropertyColumn Property="direction => direction.direction_name" />
+<div>
+    <form action="/directions">
+        <input type="search" name="titleFilter"/>
+        <input type="submit" value="Поиск" class="btn btn-primary"/>
+    </form>
+    <div>
+        <label for="items-per-page">Items per page:</label>
+        <select id="items-per-page" @bind="pagination.ItemsPerPage">
+            <option value="3">3</option>
+            <option value="5">5</option>
+            <option value="8">8</option>
+            <option value="12">12</option>
+        </select>
+    </div>
+</div>
+<div>
+    <QuickGrid Class="table" Items="FilteredDirections" Pagination="pagination">
+        <PropertyColumn Class="direction-title" Property="direction => direction.direction_name" Sortable="true" />
 
-    <TemplateColumn Context="direction">
-        <a href="@($"directions/edit?direction_id={direction.direction_id}")">Edit</a> |
-        <a href="@($"directions/details?direction_id={direction.direction_id}")">Details</a> |
-        <a href="@($"directions/delete?direction_id={direction.direction_id}")">Delete</a>
-    </TemplateColumn>
-</QuickGrid>
-
+        <TemplateColumn Context="direction">
+            <a href="@($"directions/edit?direction_id={direction.direction_id}")">Edit</a> |
+            <a href="@($"directions/details?direction_id={direction.direction_id}")">Details</a> |
+            <a href="@($"directions/delete?direction_id={direction.direction_id}")">Delete</a>
+        </TemplateColumn>
+    </QuickGrid>
+    <Paginator State="pagination" />
+</div>
 @code {
     private AcademyContext context = default!;
+
+    PaginationState pagination = new PaginationState { ItemsPerPage = 3 };
+
+    [SupplyParameterFromQuery]
+    string? TitleFilter{ get; set; }
+    IQueryable<Direction> FilteredDirections => context.Directions.Where(d => d.direction_name.Contains(TitleFilter ?? string.Empty));
 
     protected override void OnInitialized()
     {

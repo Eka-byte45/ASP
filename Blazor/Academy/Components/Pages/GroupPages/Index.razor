@@ -5,6 +5,7 @@
 @implements IAsyncDisposable
 @inject IDbContextFactory<AcademyContext> DbFactory
 @inject NavigationManager NavigationManager
+@rendermode InteractiveServer
 
 <PageTitle>Index</PageTitle>
 
@@ -13,28 +14,49 @@
 <p>
     <a href="groups/create">Create New</a>
 </p>
-
-<QuickGrid Class="table" Items="groups">
-    @* <PropertyColumn Property="group => group.group_name" /> *@
-        <TemplateColumn Context="group" Title="group">
+<div>
+    <form action="/groups">
+        <input type="search" name="titleFilter" />
+        <input type="submit" value="Поиск" class="btn btn-primary" />
+    </form>
+    <div>
+        <label for="items-per-page">Items per page:</label>
+        <select id="items-per-page" @bind="pagination.ItemsPerPage">
+            <option value="3">3</option>
+            <option value="5">5</option>
+            <option value="8">8</option>
+            <option value="10">10</option>
+        </select>
+    </div>
+</div>
+<div>
+    <QuickGrid Class="table" Items="FilteredGroups" Pagination="pagination">
+        @* <PropertyColumn Property="group => group.group_name" /> *@
+        <TemplateColumn Context="group" Title="group" Class="group-title">
             <a href="@($"groups/details?group_id={group.group_id}")">@group.group_name</a>
         </TemplateColumn>
-    <PropertyColumn Property="group => group.Direction.direction_name" />
-    <PropertyColumn Property="group => group.learning_days" />
-    <PropertyColumn Property="group => group.start_time" />
-    <PropertyColumn Property="group => group.start_date" />
+        <PropertyColumn Class="direction_name-title" Property="group => group.Direction.direction_name" Sortable="true" />
+        <PropertyColumn Class="learning_days-title" Property="group => group.learning_days" Sortable="true" />
+        <PropertyColumn Class="start_time-title" Property="group => group.start_time" Sortable="true" />
+        <PropertyColumn Class="start_date-title" Property="group => group.start_date" Sortable="true" />
 
-   @*  <TemplateColumn Context="group">
+        @*  <TemplateColumn Context="group">
         <a href="@($"groups/edit?group_id={group.group_id}")">Edit</a> |
         <a href="@($"groups/details?group_id={group.group_id}")">Details</a> |
         <a href="@($"groups/delete?group_id={group.group_id}")">Delete</a>
-    </TemplateColumn> *@
-</QuickGrid>
+        </TemplateColumn> *@
+    </QuickGrid>
 
+    <Paginator State="pagination" />
+</div>
 @code {
     private AcademyContext context = default!;
     IQueryable<Group> groups = default!;
+    PaginationState pagination = new PaginationState { ItemsPerPage = 3 };
 
+    [SupplyParameterFromQuery]
+    string? TitleFilter { get; set; }
+    IQueryable<Group> FilteredGroups => groups != null && !string.IsNullOrWhiteSpace(TitleFilter) ? groups.Where(g => g.group_name.Contains(TitleFilter)) : groups;
     protected override void OnInitialized()
     {
         context = DbFactory.CreateDbContext();

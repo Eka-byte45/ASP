@@ -5,6 +5,7 @@
 @implements IAsyncDisposable
 @inject IDbContextFactory<AcademyContext> DbFactory
 @inject NavigationManager NavigationManager
+@rendermode InteractiveServer
 
 <PageTitle>Index</PageTitle>
 
@@ -14,35 +15,61 @@
     <a href="students/create">Create New</a>
 </p>
 
-<QuickGrid Class="table" Items="students">
-    @* <PropertyColumn Property="student => student.last_name" />
-    <PropertyColumn Property="student => student.first_name" />
-    <PropertyColumn Property="student => student.middle_name" /> *@
+<div class="controls">
+    <form action="/students">
+        <input type="search" name="titleFilter"/>
+        <input type="submit" value="Поиск" class="btn btn-primary"/>
+    </form>
+    <div>
+        <label for="items-per-page">Items per page:</label>
+        <select id="items-per-page" @bind=pagination.ItemsPerPage>
+            <option value="3">3</option>
+            <option value="5">5</option>
+            <option value="8">8</option>
+            <option value="10">10</option>
+        </select>
+    </div>
+</div>
+<div>
+    <QuickGrid Class="table" Items="FilteredStudents" Pagination="pagination">
+        @* <PropertyColumn Property="student => student.last_name" />
+        <PropertyColumn Property="student => student.first_name" />
+        <PropertyColumn Property="student => student.middle_name" /> *@
 
-    <PropertyColumn Property="student => student.FullName" />
-    <PropertyColumn Property="student => student.birth_date" />
-    @* <PropertyColumn Property="student => student.email" /> *@
-    @* <PropertyColumn Property="student => student.phone" /> *@
-    @* <PropertyColumn Property="student => student.photo" /> *@
-    <PropertyColumn Property="student => student.Group.group_name" />
-    <PropertyColumn Property="student => student.Group.Direction.direction_name" />
+        <PropertyColumn Class="student-title" Property="student => student.FullName" Sortable="true"/>
+        <PropertyColumn Class="birth_date-title" Property="student => student.Age" Sortable="true" />
+        @* <PropertyColumn Property="student => student.email" /> *@
+        @* <PropertyColumn Property="student => student.phone" /> *@
+        @* <PropertyColumn Property="student => student.photo" /> *@
+        <PropertyColumn Class="group_name-title" Property="student => student.Group.group_name" Sortable="true" />
+        <PropertyColumn Class="direction_name-title" Property="student => student.Group.Direction.direction_name" Sortable="true" />
 
-    <TemplateColumn Context="student">
-       @*  <a href="@($"students/edit?stud_id={student.stud_id}")">Edit</a> | *@
-        <a href="@($"students/details?stud_id={student.stud_id}")">Details</a> 
-        @* <a href="@($"students/delete?stud_id={student.stud_id}")">Delete</a> *@
-    </TemplateColumn>
-</QuickGrid>
-
+        <TemplateColumn Context="student">
+            @*  <a href="@($"students/edit?stud_id={student.stud_id}")">Edit</a> | *@
+            <a href="@($"students/details?stud_id={student.stud_id}")">Details</a>
+            @* <a href="@($"students/delete?stud_id={student.stud_id}")">Delete</a> *@
+        </TemplateColumn>
+    </QuickGrid>
+    <Paginator State="pagination" />
+</div>
 @code {
     private AcademyContext context = default!;
     IQueryable<Student> students = default!;
+    PaginationState pagination = new PaginationState { ItemsPerPage = 3 };
+
+    [SupplyParameterFromQuery]
+    string? TitleFilter{ get; set; }
+    IQueryable<Student> FilteredStudents => context.Students
+    .Include(s => s.Group).ThenInclude(g => g.Direction)
+    .AsEnumerable() 
+    .Where(s => s.FullName.Contains(TitleFilter ?? string.Empty, StringComparison.OrdinalIgnoreCase))
+    .AsQueryable(); 
 
     protected override void OnInitialized()
     {
         context = DbFactory.CreateDbContext();
         students = context.Students.Include(s => s.Group).ThenInclude(g=>g.Direction);
     }
-
+    
     public async ValueTask DisposeAsync() => await context.DisposeAsync();
 }

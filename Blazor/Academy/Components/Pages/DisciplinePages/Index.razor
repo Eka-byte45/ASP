@@ -5,6 +5,7 @@
 @implements IAsyncDisposable
 @inject IDbContextFactory<AcademyContext> DbFactory
 @inject NavigationManager NavigationManager
+@rendermode InteractiveServer
 
 <PageTitle>Index</PageTitle>
 
@@ -14,19 +15,44 @@
     <a href="disciplines/create">Create New</a>
 </p>
 
-<QuickGrid Class="table" Items="context.Disciplines">
-    <PropertyColumn Property="discipline => discipline.discipline_name" />
-    <PropertyColumn Property="discipline => discipline.number_of_lessons" />
+<div>
+    <form action="/disciplines">
+        <input type="search" name="titleFilter" />
+        <input type="submit" value="Поиск" class="btn btn-primary" />
+    </form>
+    <div>
+        <label for="items-per-page">Items per page:</label>
+        <select id="items-per-page" @bind="pagination.ItemsPerPage">
+            <option value="3">3</option>
+            <option value="5">5</option>
+            <option value="8">8</option>
+            <option value="10">10</option>
+            <option value="35">35</option>
+        </select>
+    </div>
+</div>
 
-    <TemplateColumn Context="discipline">
-        <a href="@($"disciplines/edit?discipline_id={discipline.discipline_id}")">Edit</a> |
-        <a href="@($"disciplines/details?discipline_id={discipline.discipline_id}")">Details</a> |
-        <a href="@($"disciplines/delete?discipline_id={discipline.discipline_id}")">Delete</a>
-    </TemplateColumn>
-</QuickGrid>
+<div>
+    <QuickGrid Class="table" Items="FilteredDisciplines" Pagination="pagination">
+        <PropertyColumn Class="discipline-title" Property="discipline => discipline.discipline_name" Sortable="true" />
+        <PropertyColumn class="number_of_lessons-title" Property="discipline => discipline.number_of_lessons" Sortable="true" />
+
+        <TemplateColumn Context="discipline">
+            <a href="@($"disciplines/edit?discipline_id={discipline.discipline_id}")">Edit</a> |
+            <a href="@($"disciplines/details?discipline_id={discipline.discipline_id}")">Details</a> |
+            <a href="@($"disciplines/delete?discipline_id={discipline.discipline_id}")">Delete</a>
+        </TemplateColumn>
+    </QuickGrid>
+    <Paginator State="pagination" />
+</div>
 
 @code {
     private AcademyContext context = default!;
+    PaginationState pagination = new PaginationState { ItemsPerPage = 3 };
+
+    [SupplyParameterFromQuery]
+    string? TitleFilter { get; set; }
+    IQueryable<Discipline> FilteredDisciplines => context.Disciplines.Where(d => d.discipline_name.Contains(TitleFilter ?? string.Empty));
 
     protected override void OnInitialized()
     {

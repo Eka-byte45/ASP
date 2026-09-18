@@ -1,0 +1,17 @@
+﻿.group-title
+{
+    width:25%;
+}
+::deep .direction_name-title
+{
+    width:50%;
+}
+
+::deep .learning_days-title, .start_time-title, .start_date-title
+{
+    width:25%;
+}
+input[type=search]
+{
+    text-align: center;
+}

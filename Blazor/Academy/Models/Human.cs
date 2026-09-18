@@ -34,5 +34,20 @@ namespace Academy.Models
         {
             get =>$"{last_name} {first_name} {middle_name}";
         }
+
+        public int Age
+        {
+            get
+            { 
+                DateTime today = DateTime.Today;
+                int age = today.Year - birth_date.Year;
+                if(birth_date.Month > today.Month || (birth_date.Month==today.Month && birth_date.Day > today.Day))
+                {
+                    age--; 
+                };
+                return age;
+            }
+        }
+
     }
 }

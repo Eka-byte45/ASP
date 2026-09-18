@@ -1,0 +1,13 @@
+﻿::deep .discipline-title 
+{
+    width: 50%;
+}
+
+::deep .number_of_lessons-title 
+{
+    width: 25%;
+}
+input[type=search] 
+{
+    text-align: center;
+}

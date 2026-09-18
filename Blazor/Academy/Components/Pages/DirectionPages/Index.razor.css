@@ -1,0 +1,8 @@
+﻿::deep .direction-title
+{
+    width:50%;
+}
+input[type=search]
+{
+    text-align:center;
+}

@@ -1,0 +1,23 @@
+﻿.controls 
+{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+   
+}
+input[type=search]
+{
+    text-align:center;
+}
+::deep .student-title
+{
+    width: 70%;
+}
+::deep .direction_name-title
+{
+    width: 50%;
+}
+::deep .birth_date-title, .group_name-title
+{
+    width:25%;
+}
