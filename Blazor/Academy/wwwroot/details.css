@@ -1,0 +1,14 @@
+﻿.details
+{
+    
+    display:flex;
+    justify-content:space-between;
+}
+.details > div
+{
+    width:38%;
+}
+.photo-container > img
+{
+    width:85%;
+}
