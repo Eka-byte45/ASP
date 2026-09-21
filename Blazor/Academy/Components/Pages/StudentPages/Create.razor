@@ -3,6 +3,7 @@
 @using Academy.Models
 @inject IDbContextFactory<AcademyContext> DbFactory
 @inject NavigationManager NavigationManager
+@rendermode InteractiveServer
 
 <PageTitle>Create</PageTitle>
 
@@ -69,7 +70,18 @@
                 <label for="photo" class="form-label">photo:</label> 
                 <InputText id="photo" @bind-Value="Student.photo" class="form-control" /> 
                 <ValidationMessage For="() => Student.photo" class="text-danger" /> 
-            </div>      *@   
+            </div>      *@  
+            <div class="photo-container">
+                
+                <div>
+                    @if (Student.photo != null)
+                    {
+                        <Photo Image="@Student.photo" />
+                    }
+                </div>
+               
+                <InputFile  Onchange="LoadPhoto"/>
+            </div>
             <button type="submit" class="btn btn-primary">Create</button>
         </EditForm>
     </div>
@@ -82,7 +94,14 @@
 @code {
     [SupplyParameterFromForm]
     private Student Student { get; set; } = default!;
-
+    IBrowserFile URL { get; set; }
+    async Task LoadPhoto(InputFileChangeEventArgs e)
+    {
+        URL = e.File;
+        MemoryStream ms = new MemoryStream();
+        await URL.OpenReadStream().CopyToAsync(ms);
+        Student.photo = ms.ToArray();
+    }
     protected override void OnInitialized() => Student ??= new();
 
     // To protect from overposting attacks, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.

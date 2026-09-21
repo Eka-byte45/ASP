@@ -3,19 +3,17 @@
 @using Academy.Models
 @inject IDbContextFactory<AcademyContext> DbFactory
 @inject NavigationManager NavigationManager
-
+@rendermode InteractiveServer
 <PageTitle>Edit</PageTitle>
 
-<h1>Edit</h1>
 
-<h2>Student</h2>
-<hr />
 @if (Student is null)
 {
     <p><em>Loading...</em></p>
 }
 else
 {
+    <h1>@Student.FullName edit</h1>
     <div class="row">
         <div class="col-md-10">
             <EditForm method="post" Model="Student" OnValidSubmit="UpdateStudent" FormName="edit" Enhance>
@@ -76,10 +74,15 @@ else
                         </div>
                     </div>
                     <div class="photo-container">
-                        @if(Student.photo !=null)
-                        {
-                        <Photo image="@Student.photo" />
-                        }
+                        <div >
+                            @if (Student.photo != null)
+                            {
+                                <Photo image="@Student.photo" />
+                            }
+                        </div>
+                       
+                        <InputFile OnChange="LoadPhoto"/>
+                        
                     </div>
                 </div>
                 @* <div class="mb-3">
@@ -104,6 +107,20 @@ else
     [SupplyParameterFromForm]
     private Student? Student { get; set; }
 
+    //                  Photo:
+    IBrowserFile URL { get; set; } = default!;
+    async Task LoadPhoto(InputFileChangeEventArgs e)
+    {
+        URL = e.File;
+        //URL.OpenReadStream();
+        MemoryStream ms = new MemoryStream();
+        await URL.OpenReadStream().CopyToAsync(ms);
+        byte[] raw_data = ms.ToArray();
+        Student.photo = raw_data;
+    }
+    //////////////////////////////////////
+    
+    
     protected override async Task OnInitializedAsync()
     {
         using var context = DbFactory.CreateDbContext();

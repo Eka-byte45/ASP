@@ -1,6 +1,5 @@
 ﻿.details
-{
-    
+{ 
     display:flex;
     justify-content:space-between;
 }
@@ -10,5 +9,10 @@
 }
 .photo-container > img
 {
-    width:85%;
+    width: 100%; 
+}
+.photo-container div
+{
+    min-height: 384px;
+    border:solid 1px;
 }
