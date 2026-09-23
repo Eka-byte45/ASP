@@ -17,8 +17,8 @@ namespace Academy.Models
         [ForeignKey(nameof(Direction))]
         public int direction {  get; set; }
 
-        [Column("weekdays",TypeName="TINYINT")]
-        public int? learning_days {  get; set; }
+        [Column("weekdays", TypeName = "TINYINT")]
+        public int? learning_days { get; set; }
 
         public TimeOnly? start_time { get; set; }
         public DateOnly? start_date { get; set; }
