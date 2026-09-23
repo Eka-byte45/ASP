@@ -61,7 +61,7 @@ else
                             <label for="group" class="form-label">group:</label>
                             @*  <InputNumber id="group" @bind-Value="Student.group" class="form-control" aria-required="true" /> *@
                             <InputSelect id="group" @bind-Value="@Student.group" class="form-control">
-                                <option selected disabled>---Выберите группу---</option>
+                                <option selected disabled>--- Выберите группу ---</option>
                                 @using (AcademyContext context = DbFactory.CreateDbContext())
                                 {
                                 @foreach (Group group in context.Groups)
