@@ -1,0 +1,18 @@
+﻿@using Academy.Models
+
+<div class="photo-container">
+    @if (Human?.photo != null && Human.photo.Length > 0)
+    {
+        <img src="data:image/png;base64,@Convert.ToBase64String(Human.photo)" alt="" />
+    }
+    else
+    {
+        <div class="photo-container"></div>
+    }
+</div>
+
+@code
+{
+    [Parameter]
+    public Human? Human { get; set; }
+}

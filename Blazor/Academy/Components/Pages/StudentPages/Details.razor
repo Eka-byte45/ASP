@@ -41,12 +41,17 @@
                 <dd class="col-sm-10">@group.group_name</dd>
             </dl>
             <div class="photo-container">
+                <div>
+                    <PhotoDisplay Human="@student" />
+                </div>
+            </div>
+            @* <div class="photo-container">
                 @if(student.photo!= null)
                 {
                     <Photo Image="@student.photo"/>
                     
                 }
-            </div>
+            </div> *@
         </div>
         <div>
             <a href="@($"/students/edit?stud_id={student.stud_id}")" class="btn btn-primary">Edit</a> |
