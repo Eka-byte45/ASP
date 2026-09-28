@@ -17,5 +17,33 @@ namespace Academy.Models
 
         //Navigation properties:
         public ICollection<TeachersDisciplinesRelation> DisciplinesRelations { get; set; } = default!;
+
+        public string Experience
+        {
+            get
+            {
+                var now = DateTime.Now;
+                int years = now.Year - work_since.Year;
+                int months = now.Month - work_since.Month;
+                if(now.Day < work_since.Day)
+                {
+                    months--;
+                }
+                if(months < 0)
+                {
+                    years--;
+                    months += 12;
+                }
+                return $"{years} year(s) {months} month(s)";
+                //DateTime today = DateTime.Today;
+                //int experience = today.Year - work_since.Year;
+                //if (work_since.Month > today.Month || (work_since.Month == today.Month && work_since.Day > today.Day))
+                //{
+                //    experience--;
+                //}
+                //;
+                //return experience;
+            }
+        }
     }
 }

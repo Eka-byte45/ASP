@@ -7,14 +7,15 @@
 @inject NavigationManager NavigationManager
 @rendermode InteractiveServer
 
-<PageTitle>Index</PageTitle>
+<PageTitle>Disciplines</PageTitle>
 
-<h1>Index</h1>
 
-<p>
-    <a href="disciplines/create">Create New</a>
-</p>
-
+<div class="controls">
+    <h1>Дисциплины</h1>
+    <p>
+        <a href="disciplines/create" class="btn btn-primary">Добавить</a>
+    </p>
+</div>
 <div>
     <form action="/disciplines">
         <input type="search" name="titleFilter" />
@@ -34,7 +35,12 @@
 
 <div>
     <QuickGrid Class="table" Items="FilteredDisciplines" Pagination="pagination">
-        <PropertyColumn Class="discipline-title" Property="discipline => discipline.discipline_name" Sortable="true" />
+        @*  <PropertyColumn Class="discipline-title" Property="discipline => discipline.discipline_name" Sortable="true" /> *@
+        <TemplateColumn Title="Название" Context="discipline">
+            <a href="@($"disciplines/details?discipline_id={discipline.discipline_id}")">
+                @discipline.discipline_name
+            </a>
+        </TemplateColumn>
         <PropertyColumn class="number_of_lessons-title" Property="discipline => discipline.number_of_lessons" Sortable="true" />
 
         <TemplateColumn Context="discipline">
