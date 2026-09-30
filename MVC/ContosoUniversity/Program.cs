@@ -1,3 +1,4 @@
+using ContosoUniversity.Data;
 using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("ContosoUniversityContext") ?? throw new InvalidOperationException("Connection string 'ContosoUniversityContext' not found.");
@@ -30,4 +31,19 @@ app.MapControllerRoute(
     .WithStaticAssets();
 
 
+using (IServiceScope scope = app.Services.CreateScope())
+{
+    IServiceProvider provider = scope.ServiceProvider;
+    try
+    {
+        ContosoUniversityContext context = provider.GetRequiredService<ContosoUniversityContext>();
+        DbInitializer.Initialize(context);
+    }
+    catch(Exception ex)
+    {
+        ILogger<Program> logger = provider.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex,ex.Message);
+    }
+}
 app.Run();
+

@@ -72,7 +72,7 @@ namespace ContosoUniversity.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.Property<DateTime>("Enrollmentdate")
+                    b.Property<DateTime>("EnrollmentDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("FirstName")

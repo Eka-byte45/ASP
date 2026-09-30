@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ContosoUniversity.Migrations
 {
     [DbContext(typeof(ContosoUniversityContext))]
-    [Migration("20260930165120_mssql.local_migration_162")]
-    partial class mssqllocal_migration_162
+    [Migration("20260930174620_mssql.local_migration_538")]
+    partial class mssqllocal_migration_538
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -75,7 +75,7 @@ namespace ContosoUniversity.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.Property<DateTime>("Enrollmentdate")
+                    b.Property<DateTime>("EnrollmentDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("FirstName")

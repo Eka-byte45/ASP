@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ContosoUniversity.Migrations
 {
     /// <inheritdoc />
-    public partial class mssqllocal_migration_162 : Migration
+    public partial class mssqllocal_migration_538 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -32,7 +32,7 @@ namespace ContosoUniversity.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Enrollmentdate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    EnrollmentDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
