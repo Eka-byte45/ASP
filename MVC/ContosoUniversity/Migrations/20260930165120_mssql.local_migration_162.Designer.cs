@@ -11,15 +11,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ContosoUniversity.Migrations
 {
     [DbContext(typeof(ContosoUniversityContext))]
-    [Migration("20260928184435_mssql.local_migration_340")]
-    partial class mssqllocal_migration_340
+    [Migration("20260930165120_mssql.local_migration_162")]
+    partial class mssqllocal_migration_162
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.11")
+                .HasAnnotation("ProductVersion", "9.0.20")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -38,7 +38,7 @@ namespace ContosoUniversity.Migrations
 
                     b.HasKey("CourseID");
 
-                    b.ToTable("Course");
+                    b.ToTable("Courses");
                 });
 
             modelBuilder.Entity("ContosoUniversity.Models.Enrollment", b =>
@@ -64,7 +64,7 @@ namespace ContosoUniversity.Migrations
 
                     b.HasIndex("StudentID");
 
-                    b.ToTable("Enrollment");
+                    b.ToTable("Enrollments");
                 });
 
             modelBuilder.Entity("ContosoUniversity.Models.Student", b =>
@@ -88,7 +88,7 @@ namespace ContosoUniversity.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Student");
+                    b.ToTable("Students");
                 });
 
             modelBuilder.Entity("ContosoUniversity.Models.Enrollment", b =>

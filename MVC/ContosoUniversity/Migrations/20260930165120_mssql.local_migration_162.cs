@@ -6,13 +6,13 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ContosoUniversity.Migrations
 {
     /// <inheritdoc />
-    public partial class mssqllocal_migration_340 : Migration
+    public partial class mssqllocal_migration_162 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Course",
+                name: "Courses",
                 columns: table => new
                 {
                     CourseID = table.Column<int>(type: "int", nullable: false),
@@ -21,11 +21,11 @@ namespace ContosoUniversity.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Course", x => x.CourseID);
+                    table.PrimaryKey("PK_Courses", x => x.CourseID);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Student",
+                name: "Students",
                 columns: table => new
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
@@ -36,11 +36,11 @@ namespace ContosoUniversity.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Student", x => x.ID);
+                    table.PrimaryKey("PK_Students", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Enrollment",
+                name: "Enrollments",
                 columns: table => new
                 {
                     EnrollmentID = table.Column<int>(type: "int", nullable: false)
@@ -51,29 +51,29 @@ namespace ContosoUniversity.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Enrollment", x => x.EnrollmentID);
+                    table.PrimaryKey("PK_Enrollments", x => x.EnrollmentID);
                     table.ForeignKey(
-                        name: "FK_Enrollment_Course_CourseID",
+                        name: "FK_Enrollments_Courses_CourseID",
                         column: x => x.CourseID,
-                        principalTable: "Course",
+                        principalTable: "Courses",
                         principalColumn: "CourseID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Enrollment_Student_StudentID",
+                        name: "FK_Enrollments_Students_StudentID",
                         column: x => x.StudentID,
-                        principalTable: "Student",
+                        principalTable: "Students",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Enrollment_CourseID",
-                table: "Enrollment",
+                name: "IX_Enrollments_CourseID",
+                table: "Enrollments",
                 column: "CourseID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Enrollment_StudentID",
-                table: "Enrollment",
+                name: "IX_Enrollments_StudentID",
+                table: "Enrollments",
                 column: "StudentID");
         }
 
@@ -81,13 +81,13 @@ namespace ContosoUniversity.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Enrollment");
+                name: "Enrollments");
 
             migrationBuilder.DropTable(
-                name: "Course");
+                name: "Courses");
 
             migrationBuilder.DropTable(
-                name: "Student");
+                name: "Students");
         }
     }
 }
