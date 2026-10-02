@@ -5,8 +5,8 @@ namespace Academy.Models
 {
     public class Student:Human
     {
-        [Key]
-        public int stud_id { get; set; }
+        [Column("stud_id", TypeName = "INT")]
+        public int StudID { get; set; }
 
         [Required]
         [ForeignKey(nameof(Group))]
