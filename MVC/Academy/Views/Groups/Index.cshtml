@@ -1,0 +1,59 @@
+@model IEnumerable<Academy.Models.Group>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.group_name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.direction)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.learning_days)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.start_time)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.start_date)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(model => item.group_name)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.direction)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.learning_days)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.start_time)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.start_date)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.GroupID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.GroupID">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.GroupID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
