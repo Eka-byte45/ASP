@@ -14,7 +14,7 @@ namespace AcademyVersion2.Models
 
         //Navigation properties:
         
-        public Group Group { get; set; }
+        public Group ? Group  { get; set; }
 
     }
 }

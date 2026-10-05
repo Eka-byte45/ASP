@@ -17,7 +17,7 @@ namespace AcademyVersion2.Models
         public decimal rate {  get; set; }
 
         //Navigation properties:
-        public ObservableCollection<TeachersDisciplinesRelation> DisciplinesRelations { get; set; } = default!;
+        public ObservableCollection<TeachersDisciplinesRelation>? DisciplinesRelations { get; set; } = default!;
 
         public string Experience
         {

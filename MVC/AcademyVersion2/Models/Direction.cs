@@ -15,6 +15,6 @@ namespace AcademyVersion2.Models
         public string direction_name { get; set; }
 
         //Novigation properties:
-        public ICollection<Group> Groups { get; set; }
+        public ICollection<Group> ?Groups { get; set; }
     }
 }
