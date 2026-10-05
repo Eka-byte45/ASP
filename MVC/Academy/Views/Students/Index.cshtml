@@ -4,22 +4,26 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Студенты</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Создать</a>
 </p>
+<form asp-action="Index" method="get">
+    <div>
+        <label>Поиск по имени:<input type="search" name="SearchString" value="@ViewData["CurrentFilter"]"> </label>
+        <input type="submit" value="Найти" class="btn btn-primary"/>
+        <a asp-action="Index" class="btn btn-secondary">Сброс</a>
+    </div>
+</form>
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.group)
-            </th>
-            <th>
+            @* <th>
                 @Html.DisplayNameFor(model => model.Group)
-            </th>
+            </th> *@
             <th>
-                @Html.DisplayNameFor(model => model.last_name)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParam"]">@Html.DisplayNameFor(model => model.last_name)</a>
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.first_name)
@@ -28,7 +32,10 @@
                 @Html.DisplayNameFor(model => model.middle_name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.birth_date)
+                <a asp-action="Index"asp-route-sortOrder="@ViewData["DateSortParam"]">@Html.DisplayNameFor(model => model.birth_date)</a>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.GroupID)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.email)
@@ -39,21 +46,19 @@
             <th>
                 @Html.DisplayNameFor(model => model.photo)
             </th>
-            <th>
+            @* <th>
                 @Html.DisplayNameFor(model => model.FullName)
-            </th>
+            </th> *@
             <th></th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
-                @Html.DisplayFor(model => item.group)
-            </td>
-            <td>
+          @*   <td>
                 @Html.DisplayFor(model => item.Group)
-            </td>
+            </td> *@
+
             <td>
                 @Html.DisplayFor(model => item.last_name)
             </td>
@@ -67,6 +72,9 @@
                 @Html.DisplayFor(model => item.birth_date)
             </td>
             <td>
+                @Html.DisplayFor(model => item.GroupID)
+            </td>
+            <td>
                 @Html.DisplayFor(model => item.email)
             </td>
             <td>
@@ -75,9 +83,9 @@
             <td>
                 @Html.DisplayFor(model => item.photo)
             </td>
-            <td>
+           @*  <td>
                 @Html.DisplayFor(model => item.FullName)
-            </td>
+            </td> *@
             <td>
                 <a asp-action="Edit" asp-route-id="@item.StudID">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.StudID">Details</a> |

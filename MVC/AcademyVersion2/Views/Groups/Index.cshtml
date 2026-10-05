@@ -1,0 +1,82 @@
+@model IEnumerable<AcademyVersion2.Models.Group>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="controls">
+    <h1>Группы</h1>
+    <form asp-action="Index" method="get">
+        <div>
+            <label>Поиск по названию:<input type="search" name="SearchString" value="@ViewData["CurrentFilter"]"> </label>
+            <input type="submit" value="Найти" class="btn btn-primary" />
+            <a asp-action="Index" class="btn btn-secondary">Сброс</a>
+        </div>
+    </form>
+    <p>
+    </p>
+    <a asp-action="Create" class="btn btn-primary">Создать</a>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParam"]">@Html.DisplayNameFor(model => model.group_name)</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["DirectionSortParam"]">@Html.DisplayNameFor(model => model.Direction.direction_name)</a>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.learning_days)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.start_time)
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParam"]">@Html.DisplayNameFor(model => model.start_date)</a>
+            </th>
+            @* <th>
+                @Html.DisplayNameFor(model => model.Direction.direction_name)
+            </th> *@
+            @* <th>
+                @Html.DisplayNameFor(model => model.Students)
+            </th> *@
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(model => item.group_name)
+            </td>
+            <td>
+                @if(item.Direction!=null)
+                {
+                    @Html.DisplayFor(model => item.Direction.direction_name)      
+                }
+            </td>
+           @*  <td>
+                @Html.DisplayFor(model => item.direction)
+            </td> *@
+            <td>
+                @Html.DisplayFor(model => item.learning_days)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.start_time)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.start_date)
+            </td>
+            @* <td>
+                @Html.DisplayFor(model => item.Students)
+            </td> *@
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.group_id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.group_id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.group_id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

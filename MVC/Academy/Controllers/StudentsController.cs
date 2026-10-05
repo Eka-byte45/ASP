@@ -1,7 +1,8 @@
 
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Academy.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 public class StudentsController : Controller
 {
@@ -13,9 +14,30 @@ public class StudentsController : Controller
     }
 
     // GET: STUDENTS
-    public async Task<IActionResult> Index()    
+    public async Task<IActionResult> Index(string sortOrder, string searchString)
     {
-        return View(await _context.Students.ToListAsync());
+        ViewData["NameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+        ViewData["DateSortParam"] = sortOrder == "Date" ? "date_desc" : "Date";
+        ViewData["CurrentFilter"] = searchString;
+        IQueryable<Student> students = from student in _context.Students select student;
+        if (!String.IsNullOrEmpty(searchString))
+        {
+            students = students.Where
+                (
+                    s =>
+                    s.last_name.Contains(searchString) ||
+                    s.first_name.Contains(searchString)
+                );
+        }
+        switch (sortOrder)
+        {
+            case "name_desc": students = students.OrderByDescending(s => s.last_name); break;
+            case "date_desc": students = students.OrderByDescending(s => s.birth_date); break;
+            case "Date": students = students.OrderBy(s => s.birth_date); break;
+            default: students = students.OrderBy(s => s.last_name); break;
+        }
+        return View(await students.AsNoTracking().ToListAsync());
+        //return View(await _context.Students.ToListAsync());
     }
 
     // GET: STUDENTS/Details/5
@@ -39,6 +61,7 @@ public class StudentsController : Controller
     // GET: STUDENTS/Create
     public IActionResult Create()
     {
+        ViewData["GroupID"] = new SelectList(_context.Groups, "GroupID", "group_name");
         return View();
     }
 
@@ -47,7 +70,7 @@ public class StudentsController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("stud_id,group,Group,last_name,first_name,middle_name,birth_date,email,phone,photo,FullName")] Student student)
+    public async Task<IActionResult> Create([Bind("StudID,GroupID,last_name,first_name,middle_name,birth_date,email,phone,photo")] Student student)
     {
         if (ModelState.IsValid)
         {
@@ -79,7 +102,7 @@ public class StudentsController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int? id, [Bind("stud_id,group,Group,last_name,first_name,middle_name,birth_date,email,phone,photo,FullName")] Student student)
+    public async Task<IActionResult> Edit(int? id, [Bind("StudID,GroupID,last_name,first_name,middle_name,birth_date,email,phone,photo")] Student student)
     {
         if (id != student.StudID)
         {

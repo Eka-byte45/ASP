@@ -1,0 +1,50 @@
+@model IEnumerable<AcademyVersion2.Models.Direction>
+
+@{
+    ViewData["Title"] = "Index";
+}
+<div class="controls">
+    <h1>Направления</h1>
+    <form asp-action="Index" method="get">
+        <div>
+            <label>Поиск по названию:<input type="search" name="SearchString" value="@ViewData["CurrentFilter"]"> </label>
+            <input type="submit" value="Найти" class="btn btn-primary" />
+            <a asp-action="Index" class="btn btn-secondary">Сброс</a>
+        </div>
+    </form>
+    <p>
+    </p>
+    <a asp-action="Create" class="btn btn-primary">Создать</a>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParam"]" >@Html.DisplayNameFor(model => model.direction_name)</a>
+            </th>
+            @* <th>
+                @Html.DisplayNameFor(model => model.Groups)
+            </th> *@
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(model => item.direction_name)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => item.Groups)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.direction_id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.direction_id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.direction_id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
