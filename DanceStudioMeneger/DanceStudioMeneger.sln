@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.37614.0 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DanceStudioMeneger", "DanceStudioMeneger\DanceStudioMeneger\DanceStudioMeneger.csproj", "{0B0E8049-E11E-40CC-9551-348853A2C717}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DanceStudioMeneger.Client", "DanceStudioMeneger\DanceStudioMeneger.Client\DanceStudioMeneger.Client.csproj", "{3DDA0C59-C696-446C-8B0C-69CAF9E43388}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0B0E8049-E11E-40CC-9551-348853A2C717}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B0E8049-E11E-40CC-9551-348853A2C717}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B0E8049-E11E-40CC-9551-348853A2C717}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B0E8049-E11E-40CC-9551-348853A2C717}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3DDA0C59-C696-446C-8B0C-69CAF9E43388}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3DDA0C59-C696-446C-8B0C-69CAF9E43388}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3DDA0C59-C696-446C-8B0C-69CAF9E43388}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3DDA0C59-C696-446C-8B0C-69CAF9E43388}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {095D0589-C8D1-4F8F-9CE6-CAAD0B20ADC1}
+	EndGlobalSection
+EndGlobal
