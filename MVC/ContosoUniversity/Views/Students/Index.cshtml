@@ -15,11 +15,11 @@
             <a asp-action="Index" class="btn btn-secondary">—брос</a>
         </div>
     </form>
-        <a asp-action="Create" class="btn btn-primary">Create New</a>
+    <a asp-action="Create" class="btn btn-primary">Create New</a>
 </div>
 
-@* <div class="paginator"> *@
-    <table class="table paginatot">
+<div class="paginator">
+    <table class="table">
         <thead>
             <tr>
                 <th>
@@ -41,48 +41,65 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model) {
-            <tr>
-                <td>
-                    @Html.DisplayFor(model => item.LastName)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => item.FirstName)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => item.EnrollmentDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => item.Enrollments)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-                </td>
-            </tr>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(model => item.LastName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => item.FirstName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => item.EnrollmentDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => item.Enrollments)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                    </td>
+                </tr>
             }
         </tbody>
     </table>
-@* </div> *@
+</div>
 
 @{
     string prevDisabled = Model.HasPreviosPage ? "" : "disabled";
     string nextDisabled = Model.HasNextPage ? "" : "disabled";
 }
 
-    <div class="paginator-controls">
-        <a asp-action="Index"
-           asp-route-pageNumber="@(Model.PageIndex-1)"
-           asp-route-currentFilter="@ViewData["CurrentFilter"]"
-           class="btn btn-default @prevDisabled">
-            Previous
-        </a>
+<div class="paginator-controls">
+    <a asp-action="Index"
+       asp-route-pageNumber="@(Model.PageIndex - 1)"
+       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+       class="btn btn-default @prevDisabled">
+        Previous
+    </a>
+    <div>@Model.PageIndex</div>
+    <div class="pages">
+        @for (int i = 0; i < Model.TotalPages; i++)
+        {
+            @if (i+1 == Model.PageIndex)
+            {
+                <div class="page current-page">@(i + 1)</div>
+            }
+            else
+            {
 
-        <a asp-action="Index"
-           asp-route-pageNumber="@(Model.PageIndex+1)"
-           asp-route-currentFilter="@ViewData["CurrentFilter"]"
-           class="btn btn-default @nextDisabled">
-            Next
-        </a>
+                <div class="page">@(i + 1)</div>
+            }
+        }
+
+
     </div>
+    <a asp-action="Index"
+       asp-route-pageNumber="@(Model.PageIndex + 1)"
+       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+       class="btn btn-default @nextDisabled">
+        Next
+    </a>
+</div>
