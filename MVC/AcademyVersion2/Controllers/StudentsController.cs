@@ -1,4 +1,5 @@
 
+using AcademyVersion2;
 using AcademyVersion2.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -15,10 +16,11 @@ public class StudentsController : Controller
     }
 
     // GET: STUDENTS
-    public async Task<IActionResult> Index(string sortOrder, string searchString)    
+    public async Task<IActionResult> Index(string sortOrder, string searchString, int? pageNumber)
     {
         ViewData["NameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
         ViewData["DateSortParam"] = sortOrder == "Date" ? "date_desc" : "Date";
+        if (searchString != null) pageNumber = 1;
         ViewData["CurrentFilter"] = searchString;
         IQueryable<Student> students = from student in _context.Students select student;
         if (!String.IsNullOrEmpty(searchString))
@@ -37,7 +39,18 @@ public class StudentsController : Controller
             case "Date": students = students.OrderBy(s => s.birth_date); break;
             default: students = students.OrderBy(s => s.last_name); break;
         }
-        return View(await students.AsNoTracking().ToListAsync());
+        int pageSize = 5;
+
+        return View
+        (
+             await PaginatedList<Student>.CreateAsync
+             (
+                 students.AsNoTracking(),
+                 pageNumber ?? 1,
+                 pageSize
+             )
+         );
+        //return View(await students.AsNoTracking().ToListAsync());
         //return View(await _context.Students.ToListAsync());
     }
 

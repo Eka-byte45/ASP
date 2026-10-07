@@ -1,5 +1,5 @@
-@model IEnumerable<AcademyVersion2.Models.Group>
-
+@* @model IEnumerable<AcademyVersion2.Models.Group>*@
+    @model PaginatedList<Group>
 @{
     ViewData["Title"] = "Index";
 }
@@ -17,66 +17,94 @@
     </p>
     <a asp-action="Create" class="btn btn-primary">Создать</a>
 </div>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParam"]">@Html.DisplayNameFor(model => model.group_name)</a>
-            </th>
-            <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["DirectionSortParam"]">@Html.DisplayNameFor(model => model.Direction.direction_name)</a>
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.learning_days)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.start_time)
-            </th>
-            <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParam"]">@Html.DisplayNameFor(model => model.start_date)</a>
-            </th>
-            @* <th>
+<div class="paginator">  
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @* <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParam"]">@Html.DisplayNameFor(model => model.group_name)</a> *@
+                    <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParam"]">group_name</a>
+                </th>
+                <th>
+                    @* <a asp-action="Index" asp-route-sortOrder="@ViewData["DirectionSortParam"]">@Html.DisplayNameFor(model => model.Direction.direction_name)</a> *@
+                    <a asp-action="Index" asp-route-sortOrder="@ViewData["DirectionSortParam"]">Direction.direction_name</a>
+                </th>
+                <th>
+                    @*  @Html.DisplayNameFor(model => model.learning_days) *@
+                    learning_days
+                </th>
+                <th>
+                    @*  @Html.DisplayNameFor(model => model.start_time) *@
+                    start_time
+                </th>
+                <th>
+                    @*  <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParam"]">@Html.DisplayNameFor(model => model.start_date)</a> *@
+                    <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParam"]">start_date</a>
+                </th>
+                @* <th>
                 @Html.DisplayNameFor(model => model.Direction.direction_name)
-            </th> *@
-            @* <th>
+                </th> *@
+                @* <th>
                 @Html.DisplayNameFor(model => model.Students)
-            </th> *@
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(model => item.group_name)
-            </td>
-            <td>
-                @if(item.Direction!=null)
-                {
-                    @Html.DisplayFor(model => item.Direction.direction_name)      
-                }
-            </td>
-           @*  <td>
+                </th> *@
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(model => item.group_name)
+                </td>
+                <td>
+                    @if(item.Direction!=null)
+                    {
+                    @Html.DisplayFor(model => item.Direction.direction_name)
+                    }
+                </td>
+                @*  <td>
                 @Html.DisplayFor(model => item.direction)
-            </td> *@
-            <td>
-                @Html.DisplayFor(model => item.learning_days)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.start_time)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.start_date)
-            </td>
-            @* <td>
+                </td> *@
+                <td>
+                    @Html.DisplayFor(model => item.learning_days)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => item.start_time)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => item.start_date)
+                </td>
+                @* <td>
                 @Html.DisplayFor(model => item.Students)
-            </td> *@
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.group_id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.group_id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.group_id">Delete</a>
-            </td>
-        </tr>
+                </td> *@
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.group_id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.group_id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.group_id">Delete</a>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@{
+    string prevDisabled = Model.HasPreviousPage ? "" : "disabled";
+    string nextDisabled = Model.HasNextPage ? "" : "disabled";
 }
-    </tbody>
-</table>
+
+<div class="pagination-controls">
+    <a asp-action="Index"
+       asp-route-pageNumber="@(Model.PageIndex - 1)"
+       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+       class="btn btn-default @prevDisabled">
+        Prev
+    </a>
+
+    <a asp-action="Index"
+       asp-route-pageNumber="@(Model.PageIndex + 1)"
+       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+       class="btn btn-default @nextDisabled">
+        Next
+    </a>
+</div>

@@ -1,4 +1,5 @@
 
+using AcademyVersion2;
 using AcademyVersion2.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
@@ -14,9 +15,10 @@ public class DisciplinesController : Controller
     }
 
     // GET: DISCIPLINES
-    public async Task<IActionResult> Index(string sortOrder, string searchString)    
+    public async Task<IActionResult> Index(string sortOrder, string searchString,int?pageNumber)    
     {
         ViewData["NameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+        if (searchString != null) pageNumber = 1;
         ViewData["CurrentFilter"] = searchString;
         IQueryable<Discipline> disciplines = from discipline in _context.Disciplines select discipline;
         if (!String.IsNullOrEmpty(searchString))
@@ -32,7 +34,18 @@ public class DisciplinesController : Controller
             case "name_desc": disciplines = disciplines.OrderByDescending(d => d.discipline_name); break;
             default: disciplines = disciplines.OrderBy(d => d.discipline_name); break;
         }
-        return View(await disciplines.AsNoTracking().ToListAsync());
+        int pageSize = 5;
+        return View
+        (
+            await PaginatedList<Discipline>.CreateAsync
+            (
+                disciplines.AsNoTracking(),
+                pageNumber ?? 1,
+                pageSize
+            )
+        );
+
+        //return View(await disciplines.AsNoTracking().ToListAsync());
        // return View(await _context.Disciplines.ToListAsync());
     }
 

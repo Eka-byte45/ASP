@@ -1,4 +1,5 @@
 
+using AcademyVersion2;
 using AcademyVersion2.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
@@ -14,9 +15,10 @@ public class DirectionsController : Controller
     }
 
     // GET: DIRECTIONS
-    public async Task<IActionResult> Index(string sortOrder,string searchString)    
+    public async Task<IActionResult> Index(string sortOrder, string searchString, int? pageNumber)
     {
         ViewData["NameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+        if (searchString != null) pageNumber = 1;
         ViewData["CurrentFilter"] = searchString;
         IQueryable<Direction> directions = from direction in _context.Directions select direction;
         if (!String.IsNullOrEmpty(searchString))
@@ -24,8 +26,8 @@ public class DirectionsController : Controller
             directions = directions.Where
                 (
                     d =>
-                    d.direction_name.Contains(searchString) 
-                   
+                    d.direction_name.Contains(searchString)
+
                 );
         }
         switch (sortOrder)
@@ -33,7 +35,17 @@ public class DirectionsController : Controller
             case "name_desc": directions = directions.OrderByDescending(d => d.direction_name); break;
             default: directions = directions.OrderBy(d => d.direction_name); break;
         }
-        return View(await directions.AsNoTracking().ToListAsync());
+        int pageSize = 5;
+        return View
+        (
+            await PaginatedList<Direction>.CreateAsync
+            (
+                directions.AsNoTracking(),
+                pageNumber ?? 1,
+                pageSize
+            )
+        );
+        //return View(await directions.AsNoTracking().ToListAsync());
         //return View(await _context.Directions.ToListAsync());
     }
 

@@ -1,4 +1,5 @@
-@model IEnumerable<AcademyVersion2.Models.Teacher>
+@* @model IEnumerable<AcademyVersion2.Models.Teacher> *@
+@model PaginatedList<Teacher>
 
 @{
     ViewData["Title"] = "Index";
@@ -18,59 +19,68 @@
     </p>
     <a asp-action="Create" class="btn btn-primary">Создать</a>
 </div>
-<table class="table">
-    <thead>
-        <tr>
-            @* <th>
+<div class="paginator">
+    <table class="table">
+        <thead>
+            <tr>
+                @* <th>
                 @Html.DisplayNameFor(model => model.DisciplinesRelations)
-            </th> *@
-            <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParam"]">@Html.DisplayNameFor(model => model.last_name)</a>
-               
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.first_name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.middle_name)
-            </th>
-            <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParam"]">@Html.DisplayNameFor(model => model.birth_date)</a>
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.phone)
-            </th>
-            @*  <th>
+                </th> *@
+                <th>
+                   @*  <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParam"]">@Html.DisplayNameFor(model => model.last_name)</a> *@
+                    <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParam"]">last_name</a>
+
+                </th>
+                <th>
+                    @* @Html.DisplayNameFor(model => model.first_name) *@
+                    first_name
+                </th>
+                <th>
+                    @* @Html.DisplayNameFor(model => model.middle_name) *@
+                    middle_name
+                </th>
+                <th>
+                    @* <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParam"]">@Html.DisplayNameFor(model => model.birth_date)</a> *@
+                    <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParam"]">birth_date</a>
+                </th>
+                <th>
+                    @* @Html.DisplayNameFor(model => model.email) *@
+                    email
+                </th>
+                <th>
+                    @* @Html.DisplayNameFor(model => model.phone) *@
+                    phone
+                </th>
+                @*  <th>
                 @Html.DisplayNameFor(model => model.photo)
-            </th> *@
-            <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["WorkSinceSortParam"]">@Html.DisplayNameFor(model => model.work_since)</a>
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.rate)
-            </th>
-            @*   <th>
+                </th> *@
+                <th>
+                    @* <a asp-action="Index" asp-route-sortOrder="@ViewData["WorkSinceSortParam"]">@Html.DisplayNameFor(model => model.work_since)</a> *@
+                    <a asp-action="Index" asp-route-sortOrder="@ViewData["WorkSinceSortParam"]">work_since</a>
+                </th>
+                <th>
+                    @* @Html.DisplayNameFor(model => model.rate) *@
+                    rate
+                </th>
+                @*   <th>
                 @Html.DisplayNameFor(model => model.Experience)
-            </th> *@
-            @* <th>
+                </th> *@
+                @* <th>
                 @Html.DisplayNameFor(model => model.FullName)
-            </th>
-            <th>
+                </th>
+                <th>
                 @Html.DisplayNameFor(model => model.Age)
-            </th> *@
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+                </th> *@
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
             <tr>
                 @*  <td>
                 @Html.DisplayFor(model => item.DisciplinesRelations)
-            </td> *@
+                </td> *@
                 <td>
                     @Html.DisplayFor(model => item.last_name)
                 </td>
@@ -91,7 +101,7 @@
                 </td>
                 @*  <td>
                 @Html.DisplayFor(model => item.photo)
-            </td> *@
+                </td> *@
                 <td>
                     @Html.DisplayFor(model => item.work_since)
                 </td>
@@ -100,19 +110,41 @@
                 </td>
                 @* <td>
                 @Html.DisplayFor(model => item.FullName)
-            </td>
-            <td>
+                </td>
+                <td>
                 @Html.DisplayFor(model => item.Age)
-            </td> *@
+                </td> *@
                 @* <td>
                 @Html.DisplayFor(model => item.Experience)
-            </td> *@
+                </td> *@
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.teacher_id">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.teacher_id">Details</a> |
                     <a asp-action="Delete" asp-route-id="@item.teacher_id">Delete</a>
                 </td>
             </tr>
-        }
-    </tbody>
-</table>
+            }
+        </tbody>
+    </table>
+</div>
+
+@{
+    string prevDisabled = Model.HasPreviousPage ? "" : "disabled";
+    string nextDisabled = Model.HasNextPage ? "" : "disabled";
+}
+
+<div class="pagination-controls">
+    <a asp-action="Index"
+       asp-route-pageNumber="@(Model.PageIndex - 1)"
+       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+       class="btn btn-default @prevDisabled">
+        Prev
+    </a>
+
+    <a asp-action="Index"
+       asp-route-pageNumber="@(Model.PageIndex + 1)"
+       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+       class="btn btn-default @nextDisabled">
+        Next
+    </a>
+</div>
