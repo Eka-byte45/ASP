@@ -156,8 +156,9 @@ namespace ContosoUniversity.Data
 			};
 
 			context.AddRange(students);
+            context.SaveChanges();
 
-			var abercrombie = new Instructor
+            var abercrombie = new Instructor
 			{
 				FirstName = "Kim",
 				LastName = "Abercrombie",
@@ -202,6 +203,7 @@ namespace ContosoUniversity.Data
 			};
 
 			context.AddRange(instructors);
+			context.SaveChanges();
 
 			var officeAssignments = new OfficeAssignment[]
 			{
@@ -259,8 +261,9 @@ namespace ContosoUniversity.Data
 			};
 
 			context.AddRange(departments);
+            context.SaveChanges();
 
-			var chemistry = new Course
+            var chemistry = new Course
 			{
 				CourseID = 1050,
 				Title = "Chemistry",
@@ -335,8 +338,9 @@ namespace ContosoUniversity.Data
 			};
 
 			context.AddRange(courses);
+            context.SaveChanges();
 
-			var enrollments = new Enrollment[]
+            var enrollments = new Enrollment[]
 			{
 				new Enrollment {
 					Student = alexander,
