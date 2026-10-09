@@ -73,46 +73,46 @@
         <tbody>
             @foreach (var item in Model)
             {
-            <tr>
-                @*  <td>
+                <tr>
+                    @*  <td>
                 @Html.DisplayFor(model => item.Group)
                 </td> *@
-                <td>
-                    @Html.DisplayFor(model => item.last_name)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => item.first_name)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => item.middle_name)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => item.birth_date)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => item.Age)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => item.group)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => item.email)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => item.phone)
-                </td>
-                @* <td>
+                    <td>
+                        @Html.DisplayFor(model => item.last_name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => item.first_name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => item.middle_name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => item.birth_date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => item.Age)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => item.group)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => item.email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => item.phone)
+                    </td>
+                    @* <td>
                     @Html.DisplayFor(model => item.photo)
                 </td> *@
-                <td>
-                    @*      @Html.DisplayFor(model => item.FullName)
+                    <td>
+                        @*      @Html.DisplayFor(model => item.FullName)
                     </td> *@
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.stud_id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.stud_id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.stud_id">Delete</a>
-                </td>
-            </tr>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.stud_id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.stud_id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.stud_id">Delete</a>
+                    </td>
+                </tr>
             }
         </tbody>
     </table>
@@ -130,7 +130,26 @@
        class="btn btn-default @prevDisabled">
         Prev
     </a>
+    <div class="pages">
+        @for (int i = 0; i < Model.TotalPages; i++)
+        {
+            @if (i + 1 == Model.PageIndex)
+            {
+                <a asp-action="Index" asp-route-pageNumber="@(i+1)" class="page current-page">
+                    @(i + 1)
+                </a>
 
+            }
+            else
+            {
+                <a asp-action="Index" asp-route-pageNumber="@(i+1)" class="page">
+                    @(i + 1)
+                </a>
+
+            }
+
+        }
+    </div>
     <a asp-action="Index"
        asp-route-pageNumber="@(Model.PageIndex + 1)"
        asp-route-currentFilter="@ViewData["CurrentFilter"]"
