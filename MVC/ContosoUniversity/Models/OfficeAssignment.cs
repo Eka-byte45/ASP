@@ -14,5 +14,6 @@ namespace ContosoUniversity.Models
 
         //Navigation properties:
         public Instructor Instructor { get; set; }
+
     }
 }

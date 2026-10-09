@@ -13,13 +13,17 @@ namespace ContosoUniversity.Models
 
         [DataType(DataType.Currency)]
         [Column(TypeName ="MONEY")]
-        public decimal Buget {  get; set; }
+        public decimal Budget {  get; set; }
 
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}",ApplyFormatInEditMode = true)]
         [DisplayName("Дата запуска")]
         public DateTime StartDate {  get; set; }
 
+        public int? InstructorID {  get; set; }
+
         //Navigation properties:
+        public Instructor Administrator {  get; set; }
+        public ICollection<Course> Courses { get; set; }
     }
 }

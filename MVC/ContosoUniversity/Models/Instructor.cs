@@ -29,5 +29,7 @@ namespace ContosoUniversity.Models
             get=>$"{LastName} {FirstName}";
         }
         //TODO: Navigation properties:
+        public ICollection<CourseAssignment> CourseAssignments {  get; set; }
+        public OfficeAssignment OfficeAssignments { get; set; }
     }
 }
