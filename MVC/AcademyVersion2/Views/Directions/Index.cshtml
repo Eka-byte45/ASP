@@ -2,7 +2,7 @@
     @model PaginatedList<Direction>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Направления и группы";
 }
 <div class="controls">
     <h1>Направления</h1>
@@ -35,8 +35,14 @@
         <tbody>
             @foreach (var item in Model)
             {
-            <tr>
+                string selectedRow = "";
+                if(item.direction_id==(int?)ViewData["DirectionID"])
+                {
+                    selectedRow = "table-success";
+                }
+                <tr class="@selectedRow">
                 <td>
+                    <a asp-action="Index" asp-route-directionID="@item.direction_id">Select</a> |
                     @Html.DisplayFor(model => item.direction_name)
                 </td>
                 <td>
@@ -92,3 +98,40 @@
         Next
     </a>
 </div>
+
+<hr class="my-4" />
+@if (ViewData["DirectionId"] != null && !string.IsNullOrEmpty((string)ViewData["DirectionName"]))
+{
+    <h3>Список групп по направлению: @ViewData["DirectionName"]</h3>
+    List<AcademyVersion2.Models.Group> groupsList = ViewBag.GroupsForDirection as List<AcademyVersion2.Models.Group>;
+    @if (groupsList != null && groupsList.Count > 0)
+    {
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Название</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (AcademyVersion2.Models.Group group in groupsList)
+                {
+                    <tr>
+                        <td>@group.group_name</td>
+                        
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p class="text-muted">Для этого направления пока не создано ни одной группы.</p>
+    }
+}
+else
+{
+    <div class="alert alert-info">
+        Выберите направление из списка выше (ссылка "Select"), чтобы увидеть группы этого направления.
+    </div>
+}

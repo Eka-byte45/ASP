@@ -15,7 +15,7 @@ public class DisciplinesController : Controller
     }
 
     // GET: DISCIPLINES
-    public async Task<IActionResult> Index(string sortOrder, string searchString,int?pageNumber)    
+    public async Task<IActionResult> Index(string sortOrder, string searchString,int?pageNumber,int?disciplineID)    
     {
         ViewData["NameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
         if (searchString != null) pageNumber = 1;
@@ -35,6 +35,30 @@ public class DisciplinesController : Controller
             default: disciplines = disciplines.OrderBy(d => d.discipline_name); break;
         }
         int pageSize = 5;
+
+        //var paginatedDisciplines = await PaginatedList<Discipline>.CreateAsync(disciplines.AsNoTracking(), pageNumber ?? 1, pageSize);
+        //List<Teacher> selectedDisciplinesTeachers = new List<Teacher>();
+        //string selectedDisciplineName = string.Empty;
+        //if (disciplineID.HasValue)
+        //{
+        //    var discipline = await _context.Disciplines
+        //        .FirstOrDefaultAsync(d => d.discipline_id == disciplineID.Value);
+
+        //    if (discipline != null)
+        //    {
+        //        selectedDisciplineName = discipline.discipline_name;
+        //        selectedDisciplinesTeachers = await _context.Teachers
+        //            .Where(d => d.di == disciplineID.Value)
+        //            .OrderBy(d => d.last_name)
+        //            .ThenBy(d => d.first_name)
+        //            .ToListAsync();
+        //    }
+
+        //}
+        //ViewData["DisciplineId"] = disciplineID;
+        //ViewData["DisciplineName"] = selectedDisciplineName;
+        //ViewBag.Teachers = selectedDisciplinesTeachers;
+        //return View(paginatedDisciplines);
         return View
         (
             await PaginatedList<Discipline>.CreateAsync
@@ -46,7 +70,7 @@ public class DisciplinesController : Controller
         );
 
         //return View(await disciplines.AsNoTracking().ToListAsync());
-       // return View(await _context.Disciplines.ToListAsync());
+        // return View(await _context.Disciplines.ToListAsync());
     }
 
     // GET: DISCIPLINES/Details/5

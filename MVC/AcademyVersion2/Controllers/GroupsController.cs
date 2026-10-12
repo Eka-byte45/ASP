@@ -16,8 +16,9 @@ public class GroupsController : Controller
     }
 
     // GET: GROUPS
-    public async Task<IActionResult> Index(string sortOrder, string searchString, int? pageNumber)    
+    public async Task<IActionResult> Index(string sortOrder, string searchString, int? pageNumber,int? groupID)    
     {
+      
         ViewData["NameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
         ViewData["DateSortParam"] = sortOrder == "Date" ? "date_desc" : "Date";
         ViewData["DirectionSortParam"] =sortOrder=="direction"?"direction_desc":"direction";
@@ -44,16 +45,38 @@ public class GroupsController : Controller
             default: groups = groups.OrderBy(g => g.group_name); break;
         }
         int pageSize = 5;
+        PaginatedList<Group> paginatedGroups = await PaginatedList<Group>.CreateAsync(groups.AsNoTracking(),pageNumber??1, pageSize);
+        List<Student> selectedGroupsStudents= new List<Student>();
+        string selectedGroupName = string.Empty;
+        if(groupID.HasValue)
+        {
+            Group group = await _context.Groups
+                .FirstOrDefaultAsync(g=>g.group_id == groupID.Value);
 
-        return View
-        (
-            await PaginatedList<Group>.CreateAsync
-            (
-                groups.AsNoTracking(),
-                pageNumber ?? 1,
-                pageSize
-            )
-        );
+            if(group != null)
+            {
+                selectedGroupName = group.group_name;
+                selectedGroupsStudents = await _context.Students
+                    .Where(s => s.group == groupID.Value)
+                    .OrderBy(s => s.last_name)
+                    .ThenBy(s => s.first_name)
+                    .ToListAsync();
+            }
+
+        }
+        ViewData["GroupId"] = groupID;
+        ViewData["GroupName"]= selectedGroupName;
+        ViewBag.Students = selectedGroupsStudents;
+        return View(paginatedGroups);
+        //return View
+        //(
+        //    await PaginatedList<Group>.CreateAsync
+        //    (
+        //        groups.AsNoTracking(),
+        //        pageNumber ?? 1,
+        //        pageSize
+        //    )
+        //);
         //return View(await groups.AsNoTracking().ToListAsync());
        // return View(await _context.Groups.ToListAsync());
     }
