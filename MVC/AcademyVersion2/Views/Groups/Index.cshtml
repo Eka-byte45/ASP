@@ -58,10 +58,10 @@
             {
                 string selectedRow = "";
                 if (item.group_id == (int?)ViewData["GroupId"])
-                    selectedRow = "tables-succes";
+                    selectedRow = "table-success";
                 <tr class="@selectedRow">
                 <td>
-                    <a asp-action="Index" asp-route-groupID="@item.group_id">Select</a> |
+                    @* <a asp-action="Index" asp-route-groupID="@item.group_id">Select</a> | *@
                     @Html.DisplayFor(model => item.group_name)
                 </td>
                 <td>
@@ -86,6 +86,7 @@
                 @Html.DisplayFor(model => item.Students)
                 </td> *@
                 <td>
+                    <a asp-action="Index" asp-route-groupID="@item.group_id">Select</a>|
                     <a asp-action="Edit" asp-route-id="@item.group_id">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.group_id">Details</a> |
                     <a asp-action="Delete" asp-route-id="@item.group_id">Delete</a>

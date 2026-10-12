@@ -42,13 +42,14 @@
                 }
                 <tr class="@selectedRow">
                 <td>
-                    <a asp-action="Index" asp-route-directionID="@item.direction_id">Select</a> |
+                   
                     @Html.DisplayFor(model => item.direction_name)
                 </td>
                 <td>
                     @Html.DisplayFor(model => item.Groups)
                 </td>
                 <td>
+                    <a asp-action="Index" asp-route-directionID="@item.direction_id">Select</a> |
                     <a asp-action="Edit" asp-route-id="@item.direction_id">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.direction_id">Details</a> |
                     <a asp-action="Delete" asp-route-id="@item.direction_id">Delete</a>
@@ -100,7 +101,7 @@
 </div>
 
 <hr class="my-4" />
-@if (ViewData["DirectionId"] != null && !string.IsNullOrEmpty((string)ViewData["DirectionName"]))
+@if (ViewData["DirectionID"] != null && !string.IsNullOrEmpty((string)ViewData["DirectionName"]))
 {
     <h3>Список групп по направлению: @ViewData["DirectionName"]</h3>
     List<AcademyVersion2.Models.Group> groupsList = ViewBag.GroupsForDirection as List<AcademyVersion2.Models.Group>;

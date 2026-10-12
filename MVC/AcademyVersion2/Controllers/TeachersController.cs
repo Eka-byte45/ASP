@@ -15,7 +15,7 @@ public class TeachersController : Controller
     }
 
     // GET: TEACHERS
-    public async Task<IActionResult> Index(string sortOrder,string searchString,int? pageNumber)    
+    public async Task<IActionResult> Index(string sortOrder,string searchString,int? pageNumber,int? teacherID)    
     {
         ViewData["NameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
         ViewData["DateSortParam"] = sortOrder == "Date" ? "date_desc" : "Date";
@@ -43,6 +43,15 @@ public class TeachersController : Controller
             default: teachers = teachers.OrderBy(s => s.last_name); break;
         }
         int pageSize = 5;
+
+        //var paginatedList = await PaginatedList<Teacher>.CreateAsync(teachers.AsNoTracking(), pageNumber ?? 1, 5);
+        //if(teacherID.HasValue)
+        //{
+        //    ViewData["TeacherID"]=teacherID.Value;
+        //    var selectedTeacher = await _context.Teachers.FindAsync(teacherID.Value);
+        //    ViewData["TeacherFullName"]=selectedTeacher?.FullName;
+
+        //}
         return View
         (
             await PaginatedList<Teacher>.CreateAsync
