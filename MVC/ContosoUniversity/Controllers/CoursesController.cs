@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ContosoUniversity.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 public class CoursesController : Controller
 {
@@ -39,6 +40,7 @@ public class CoursesController : Controller
     // GET: COURSES/Create
     public IActionResult Create()
     {
+        PopulateDepartmentsDropDownList();
         return View();
     }
 
@@ -47,7 +49,7 @@ public class CoursesController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("CourseID,Title,Credits,Enrollments")] Course course)
+    public async Task<IActionResult> Create([Bind("CourseID,Title,Credits,DepartmentID")] Course course)
     {
         if (ModelState.IsValid)
         {
@@ -55,6 +57,7 @@ public class CoursesController : Controller
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+        PopulateDepartmentsDropDownList(course.DepartmentID);
         return View(course);
     }
 
@@ -71,6 +74,7 @@ public class CoursesController : Controller
         {
             return NotFound();
         }
+        PopulateDepartmentsDropDownList (course.DepartmentID);
         return View(course);
     }
 
@@ -79,7 +83,7 @@ public class CoursesController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int? id, [Bind("CourseID,Title,Credits,Enrollments")] Course course)
+    public async Task<IActionResult> Edit(int? id, [Bind("CourseID,Title,Credits")] Course course)
     {
         if (id != course.CourseID)
         {
@@ -104,11 +108,18 @@ public class CoursesController : Controller
                     throw;
                 }
             }
+            PopulateDepartmentsDropDownList(course.DepartmentID);
             return RedirectToAction(nameof(Index));
         }
         return View(course);
     }
-
+    void PopulateDepartmentsDropDownList(object selectDepatrment=null)
+    {
+        IQueryable<Department> departments= from department in _context.Departments
+                                            orderby department.Name
+                                            select department;
+        ViewBag.DepartmentID = new SelectList(departments.AsNoTracking(),"DepartmentID","Name", selectDepatrment);
+    }
     // GET: COURSES/Delete/5
     public async Task<IActionResult> Delete(int? id)
     {
