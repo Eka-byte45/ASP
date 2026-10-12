@@ -117,3 +117,25 @@
         </tbody>
     </table>
 }
+@if(Model.Enrollments !=null)
+{
+    <h3>Студенты, прошедшие курс</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Студент</th>
+                <th>Оценка</th>
+            </tr>
+        </thead>
+            @foreach(Enrollment enrollment in Model.Enrollments)
+        {
+            <tr>
+                <td>@enrollment.Student.FullName</td>
+                <td>@enrollment.Grade</td>
+            </tr>
+        }
+        <tbody>
+
+        </tbody>
+    </table>
+}

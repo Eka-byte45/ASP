@@ -156,9 +156,9 @@ namespace ContosoUniversity.Data
 			};
 
 			context.AddRange(students);
-            context.SaveChanges();
+			context.SaveChanges();
 
-            var abercrombie = new Instructor
+			var abercrombie = new Instructor
 			{
 				FirstName = "Kim",
 				LastName = "Abercrombie",
@@ -219,6 +219,7 @@ namespace ContosoUniversity.Data
 			};
 
 			context.AddRange(officeAssignments);
+			context.SaveChanges();
 
 			var english = new Department
 			{
@@ -261,9 +262,9 @@ namespace ContosoUniversity.Data
 			};
 
 			context.AddRange(departments);
-            context.SaveChanges();
+			context.SaveChanges();
 
-            var chemistry = new Course
+			var chemistry = new Course
 			{
 				CourseID = 1050,
 				Title = "Chemistry",
@@ -338,9 +339,9 @@ namespace ContosoUniversity.Data
 			};
 
 			context.AddRange(courses);
-            context.SaveChanges();
+			context.SaveChanges();
 
-            var enrollments = new Enrollment[]
+			var enrollments = new Enrollment[]
 			{
 				new Enrollment {
 					Student = alexander,
@@ -398,7 +399,46 @@ namespace ContosoUniversity.Data
 				}
 			};
 
+
 			context.AddRange(enrollments);
+			context.SaveChanges();
+
+			CourseAssignment[] courseInstructors = new CourseAssignment[]
+			{
+				new CourseAssignment {
+					CourseID = courses.Single(c => c.Title == "Chemistry" ).CourseID,
+					InstructorID = instructors.Single(i => i.LastName == "Kapoor").ID
+					},
+				new CourseAssignment {
+					CourseID = courses.Single(c => c.Title == "Chemistry" ).CourseID,
+					InstructorID = instructors.Single(i => i.LastName == "Harui").ID
+					},
+				new CourseAssignment {
+					CourseID = courses.Single(c => c.Title == "Microeconomics" ).CourseID,
+					InstructorID = instructors.Single(i => i.LastName == "Zheng").ID
+					},
+				new CourseAssignment {
+					CourseID = courses.Single(c => c.Title == "Macroeconomics" ).CourseID,
+					InstructorID = instructors.Single(i => i.LastName == "Zheng").ID
+					},
+				new CourseAssignment {
+					CourseID = courses.Single(c => c.Title == "Calculus" ).CourseID,
+					InstructorID = instructors.Single(i => i.LastName == "Fakhouri").ID
+					},
+				new CourseAssignment {
+					CourseID = courses.Single(c => c.Title == "Trigonometry" ).CourseID,
+					InstructorID = instructors.Single(i => i.LastName == "Harui").ID
+					},
+				new CourseAssignment {
+					CourseID = courses.Single(c => c.Title == "Composition" ).CourseID,
+					InstructorID = instructors.Single(i => i.LastName == "Abercrombie").ID
+					},
+				new CourseAssignment {
+					CourseID = courses.Single(c => c.Title == "Literature" ).CourseID,
+					InstructorID = instructors.Single(i => i.LastName == "Abercrombie").ID
+					},
+			};
+			context.AddRange(courseInstructors);
 			context.SaveChanges();
 		}
 	}
