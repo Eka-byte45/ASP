@@ -23,14 +23,14 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Credits)
         </dd>
-    </dl>
+
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Enrollments)
+            @Html.DisplayNameFor(model => model.Department)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Enrollments)
+            @Html.DisplayFor(model => model.Department.Name)
         </dd>
-    </dl>
+    
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.CourseID">Edit</a> |

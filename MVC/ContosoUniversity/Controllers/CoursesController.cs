@@ -28,6 +28,7 @@ public class CoursesController : Controller
         }
 
         var course = await _context.Courses
+            .Include(c=>c.Department)
             .FirstOrDefaultAsync(m => m.CourseID == id);
         if (course == null)
         {
@@ -113,12 +114,12 @@ public class CoursesController : Controller
         }
         return View(course);
     }
-    void PopulateDepartmentsDropDownList(object selectDepatrment=null)
+    void PopulateDepartmentsDropDownList(object selectDepartment=null)
     {
         IQueryable<Department> departments= from department in _context.Departments
                                             orderby department.Name
                                             select department;
-        ViewBag.DepartmentID = new SelectList(departments.AsNoTracking(),"DepartmentID","Name", selectDepatrment);
+        ViewBag.DepartmentID = new SelectList(departments.AsNoTracking(),"DepartmentID","Name", selectDepartment);
     }
     // GET: COURSES/Delete/5
     public async Task<IActionResult> Delete(int? id)
