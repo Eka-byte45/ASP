@@ -1,5 +1,6 @@
 @* @model IEnumerable<AcademyVersion2.Models.Group>*@
-    @model PaginatedList<Group>
+@* @model PaginatedList<Group> *@
+@model AcademyVersion2.Models.ViewModels.GroupIndexData
 @{
     ViewData["Title"] = "Группы и студенты";
 }
@@ -17,7 +18,7 @@
     </p>
     <a asp-action="Create" class="btn btn-primary">Создать</a>
 </div>
-<div class="paginator">  
+<div class="paginator">
     <table class="table">
         <thead>
             <tr>
@@ -38,7 +39,7 @@
                 <th>
                     @*  @Html.DisplayNameFor(model => model.start_time) *@
                     @* start_time *@
-                    Старт 
+                    Старт
                 </th>
                 <th>
                     @*  <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParam"]">@Html.DisplayNameFor(model => model.start_date)</a> *@
@@ -54,50 +55,50 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model) 
+            @foreach (Group item in Model.Groups)
             {
                 string selectedRow = "";
                 if (item.group_id == (int?)ViewData["GroupId"])
                     selectedRow = "table-success";
                 <tr class="@selectedRow">
-                <td>
-                    @* <a asp-action="Index" asp-route-groupID="@item.group_id">Select</a> | *@
-                    @Html.DisplayFor(model => item.group_name)
-                </td>
-                <td>
-                    @if(item.Direction!=null)
-                    {
-                        @Html.DisplayFor(model => item.Direction.direction_name)
-                    }
-                </td>
-                @*  <td>
+                    <td>
+                        @* <a asp-action="Index" asp-route-groupID="@item.group_id">Select</a> | *@
+                        @Html.DisplayFor(model => item.group_name)
+                    </td>
+                    <td>
+                        @if (item.Direction != null)
+                        {
+                            @Html.DisplayFor(model => item.Direction.direction_name)
+                        }
+                    </td>
+                    @*  <td>
                 @Html.DisplayFor(model => item.direction)
                 </td> *@
-                <td>
-                    @Html.DisplayFor(model => item.learning_days)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => item.start_time)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => item.start_date)
-                </td>
-                @* <td>
+                    <td>
+                        @Html.DisplayFor(model => item.learning_days)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => item.start_time)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => item.start_date)
+                    </td>
+                    @* <td>
                 @Html.DisplayFor(model => item.Students)
                 </td> *@
-                <td>
-                    <a asp-action="Index" asp-route-groupID="@item.group_id">Select</a>|
-                    <a asp-action="Edit" asp-route-id="@item.group_id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.group_id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.group_id">Delete</a>
-                </td>
-            </tr>
+                    <td>
+                        <a asp-action="Index" asp-route-id="@item.group_id">Select</a>|
+                        <a asp-action="Edit" asp-route-id="@item.group_id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.group_id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.group_id">Delete</a>
+                    </td>
+                </tr>
             }
         </tbody>
     </table>
 </div>
 
-@{
+@* @{
     string prevDisabled = Model.HasPreviousPage ? "" : "disabled";
     string nextDisabled = Model.HasNextPage ? "" : "disabled";
 }
@@ -135,9 +136,9 @@
        class="btn btn-default @nextDisabled">
         Next
     </a>
-</div>
+</div> *@
 
-<hr class="my-4"/>
+@* <hr class="my-4"/>
 @if(ViewData["GroupId"]!=null && !string.IsNullOrEmpty((string)ViewData["GroupName"]))
 {
     <h3>Студенты группы: @ViewData["GroupName"]</h3>
@@ -172,5 +173,23 @@ else
     <div class="alert alert-info">
         Выберите группу из списка выше (ссылка "Select"), чтобы увидеть список студентов.
     </div>
+} *@
+@if (Model.Students != null && Model.Students.Any())
+{
+    <h3>Студенты:</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ФИО студента</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Student student in Model.Students)
+            {
+                <tr>
+                    <td>@student.last_name @student.first_name @student.middle_name</td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
-    

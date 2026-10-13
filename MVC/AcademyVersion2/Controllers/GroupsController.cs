@@ -16,15 +16,15 @@ public class GroupsController : Controller
     }
 
     // GET: GROUPS
-    public async Task<IActionResult> Index(string sortOrder, string searchString, int? pageNumber,int? groupID)    
+    public async Task<IActionResult> Index(string sortOrder, string searchString, int? pageNumber, int? id)
     {
-      
+
         ViewData["NameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
         ViewData["DateSortParam"] = sortOrder == "Date" ? "date_desc" : "Date";
-        ViewData["DirectionSortParam"] =sortOrder=="direction"?"direction_desc":"direction";
+        ViewData["DirectionSortParam"] = sortOrder == "direction" ? "direction_desc" : "direction";
         if (searchString != null) pageNumber = 1;
         ViewData["CurrentFilter"] = searchString;
-        IQueryable<Group> groups = _context.Groups.Include(g=>g.Direction);
+        IQueryable<Group> groups = _context.Groups.Include(g => g.Direction);
         if (!String.IsNullOrEmpty(searchString))
         {
             groups = groups.Where
@@ -32,7 +32,7 @@ public class GroupsController : Controller
                     g =>
                     g.group_name.Contains(searchString) ||
                     g.Direction.direction_name.Contains(searchString)
-                    
+
                 );
         }
         switch (sortOrder)
@@ -45,29 +45,48 @@ public class GroupsController : Controller
             default: groups = groups.OrderBy(g => g.group_name); break;
         }
         int pageSize = 5;
-        PaginatedList<Group> paginatedGroups = await PaginatedList<Group>.CreateAsync(groups.AsNoTracking(),pageNumber??1, pageSize);
-        List<Student> selectedGroupsStudents= new List<Student>();
-        string selectedGroupName = string.Empty;
-        if(groupID.HasValue)
+
+        AcademyVersion2.Models.ViewModels.GroupIndexData viewModel = new AcademyVersion2.Models.ViewModels.GroupIndexData();
+        viewModel.Groups = await _context.Groups
+            .Include(g => g.Direction)
+            .OrderBy(g => g.group_name)
+            .AsNoTracking()
+            .ToListAsync();
+        if (id != null)
         {
-            Group group = await _context.Groups
-                .FirstOrDefaultAsync(g=>g.group_id == groupID.Value);
-
-            if(group != null)
-            {
-                selectedGroupName = group.group_name;
-                selectedGroupsStudents = await _context.Students
-                    .Where(s => s.group == groupID.Value)
-                    .OrderBy(s => s.last_name)
-                    .ThenBy(s => s.first_name)
-                    .ToListAsync();
-            }
-
+            ViewData["GroupID"] = id.Value;
+            viewModel.Students = await _context.Students
+                .AsNoTracking()
+                .Where(s => s.group == id)
+                .OrderBy(s => s.last_name)
+                .ThenBy(s=>s.first_name)
+                .ToListAsync();
         }
-        ViewData["GroupId"] = groupID;
-        ViewData["GroupName"]= selectedGroupName;
-        ViewBag.Students = selectedGroupsStudents;
-        return View(paginatedGroups);
+
+        return View(viewModel);
+        //PaginatedList<Group> paginatedGroups = await PaginatedList<Group>.CreateAsync(groups.AsNoTracking(),pageNumber??1, pageSize);
+        //List<Student> selectedGroupsStudents= new List<Student>();
+        //string selectedGroupName = string.Empty;
+        //if(groupID.HasValue)
+        //{
+        //    Group group = await _context.Groups
+        //        .FirstOrDefaultAsync(g=>g.group_id == groupID.Value);
+
+        //    if(group != null)
+        //    {
+        //        selectedGroupName = group.group_name;
+        //        selectedGroupsStudents = await _context.Students
+        //            .Where(s => s.group == groupID.Value)
+        //            .OrderBy(s => s.last_name)
+        //            .ThenBy(s => s.first_name)
+        //            .ToListAsync();
+        //    }
+
+        //}
+        //ViewData["GroupId"] = groupID;
+        //ViewData["GroupName"]= selectedGroupName;
+        //ViewBag.Students = selectedGroupsStudents;
+        //return View(paginatedGroups);
         //return View
         //(
         //    await PaginatedList<Group>.CreateAsync
@@ -78,7 +97,7 @@ public class GroupsController : Controller
         //    )
         //);
         //return View(await groups.AsNoTracking().ToListAsync());
-       // return View(await _context.Groups.ToListAsync());
+        // return View(await _context.Groups.ToListAsync());
     }
 
     // GET: GROUPS/Details/5
