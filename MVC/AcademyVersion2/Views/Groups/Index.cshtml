@@ -98,22 +98,22 @@
     </table>
 </div>
 
-@* @{
-    string prevDisabled = Model.HasPreviousPage ? "" : "disabled";
-    string nextDisabled = Model.HasNextPage ? "" : "disabled";
+@{
+    string prevDisabled = Model.Groups.HasPreviousPage ? "" : "disabled";
+    string nextDisabled = Model.Groups.HasNextPage ? "" : "disabled";
 }
 
 <div class="pagination-controls">
     <a asp-action="Index"
-       asp-route-pageNumber="@(Model.PageIndex - 1)"
+       asp-route-pageNumber="@(Model.Groups.PageIndex - 1)"
        asp-route-currentFilter="@ViewData["CurrentFilter"]"
        class="btn btn-default @prevDisabled">
         Prev
     </a>
     <div class="pages">
-        @for (int i = 0; i < Model.TotalPages; i++)
+        @for (int i = 0; i < Model.Groups.TotalPages; i++)
         {
-            @if (i + 1 == Model.PageIndex)
+            @if (i + 1 == Model.Groups.PageIndex)
             {
                 <a asp-action="Index" asp-route-pageNumber="@(i+1)" class="page current-page">
                     @(i + 1)
@@ -131,12 +131,12 @@
         }
     </div>
     <a asp-action="Index"
-       asp-route-pageNumber="@(Model.PageIndex + 1)"
+       asp-route-pageNumber="@(Model.Groups.PageIndex + 1)"
        asp-route-currentFilter="@ViewData["CurrentFilter"]"
        class="btn btn-default @nextDisabled">
         Next
     </a>
-</div> *@
+</div>
 
 @* <hr class="my-4"/>
 @if(ViewData["GroupId"]!=null && !string.IsNullOrEmpty((string)ViewData["GroupName"]))

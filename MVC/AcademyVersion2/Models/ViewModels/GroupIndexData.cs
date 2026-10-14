@@ -2,7 +2,7 @@
 {
     public class GroupIndexData
     {
-        public IEnumerable<Group> Groups {  get; set; }
+        public PaginatedList<Group> Groups {  get; set; }
        public IEnumerable<Student> Students { get; set; }
     }
 }

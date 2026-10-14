@@ -22,8 +22,12 @@ public class GroupsController : Controller
         ViewData["NameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
         ViewData["DateSortParam"] = sortOrder == "Date" ? "date_desc" : "Date";
         ViewData["DirectionSortParam"] = sortOrder == "direction" ? "direction_desc" : "direction";
+
         if (searchString != null) pageNumber = 1;
         ViewData["CurrentFilter"] = searchString;
+
+        AcademyVersion2.Models.ViewModels.GroupIndexData viewModel = new AcademyVersion2.Models.ViewModels.GroupIndexData();
+
         IQueryable<Group> groups = _context.Groups.Include(g => g.Direction);
         if (!String.IsNullOrEmpty(searchString))
         {
@@ -45,13 +49,17 @@ public class GroupsController : Controller
             default: groups = groups.OrderBy(g => g.group_name); break;
         }
         int pageSize = 5;
-
-        AcademyVersion2.Models.ViewModels.GroupIndexData viewModel = new AcademyVersion2.Models.ViewModels.GroupIndexData();
-        viewModel.Groups = await _context.Groups
-            .Include(g => g.Direction)
-            .OrderBy(g => g.group_name)
-            .AsNoTracking()
-            .ToListAsync();
+        viewModel.Groups = await PaginatedList<Group>.CreateAsync
+            (
+                groups.AsNoTracking(),
+                pageNumber ?? 1,
+                pageSize
+            );
+        //viewModel.Groups = await _context.Groups
+        //    .Include(g => g.Direction)
+        //    .OrderBy(g => g.group_name)
+        //    .AsNoTracking()
+        //    .ToListAsync();
         if (id != null)
         {
             ViewData["GroupID"] = id.Value;
