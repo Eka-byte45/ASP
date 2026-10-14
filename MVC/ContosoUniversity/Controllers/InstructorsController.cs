@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ContosoUniversity.Models;
+using System.Linq.Expressions;
 
 public class InstructorsController : Controller
 {
@@ -51,7 +52,7 @@ public class InstructorsController : Controller
             return NotFound();
         }
 
-        var instructor = await _context.Instructors
+        var instructor = await _context.Instructors.Include(i=>i.OfficeAssignments)
             .FirstOrDefaultAsync(m => m.ID == id);
         if (instructor == null)
         {
@@ -91,7 +92,11 @@ public class InstructorsController : Controller
             return NotFound();
         }
 
-        var instructor = await _context.Instructors.FindAsync(id);
+        var instructor = await _context
+                                .Instructors
+                                .Include(i=>i.OfficeAssignments)
+                                .AsNoTracking()
+                                .FirstOrDefaultAsync(i=>i.ID==id);
         if (instructor == null)
         {
             return NotFound();
@@ -111,27 +116,52 @@ public class InstructorsController : Controller
             return NotFound();
         }
 
-        if (ModelState.IsValid)
+        instructor = await _context.Instructors
+                                   .Include(i => i.OfficeAssignments)
+                                   .FirstOrDefaultAsync(i => i.ID == id);
+        Task <bool> ok = TryUpdateModelAsync<Instructor>
+            (
+                instructor,
+                "",
+                i =>i.FirstName,i=>i.LastName,i=>i.HireDate,i=>i.OfficeAssignments
+            );
+        if(ok.IsCompleted)
         {
+            if(String.IsNullOrWhiteSpace(instructor.OfficeAssignments?.Location))
+                instructor.OfficeAssignments = null;
             try
             {
-                _context.Update(instructor);
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateException ex)
             {
-                if (!InstructorExists(instructor.ID))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                ModelState.AddModelError("", "Невозможно обновить данные");
             }
-            return RedirectToAction(nameof(Index));
+            return View(instructor);
         }
+        return Redirect($"/instructors/Details/{instructor.ID}");
         return View(instructor);
+
+        //if (ModelState.IsValid)
+        //{
+        //    try
+        //    {
+        //        _context.Update(instructor);
+        //        await _context.SaveChangesAsync();
+        //    }
+        //    catch (DbUpdateConcurrencyException)
+        //    {
+        //        if (!InstructorExists(instructor.ID))
+        //        {
+        //            return NotFound();
+        //        }
+        //        else
+        //        {
+        //            throw;
+        //        }
+        //    }
+        //    return RedirectToAction(nameof(Index));
+        //}
     }
 
     // GET: INSTRUCTORS/Delete/5
