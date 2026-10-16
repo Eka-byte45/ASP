@@ -93,8 +93,7 @@ public class InstructorsController : Controller
             return NotFound();
         }
 
-        var instructor = await _context
-                                .Instructors
+        var instructor = await _context.Instructors
                                 .Include(i => i.OfficeAssignments)
                                 .Include(i => i.CourseAssignments)
                                     .ThenInclude(ca => ca.Course)
@@ -104,13 +103,14 @@ public class InstructorsController : Controller
         {
             return NotFound();
         }
-        PopulateAssignmendCourseData(instructor);
+		PopulateAssignmendCourseData(instructor);
         return View(instructor);
     }
 
     void PopulateAssignmendCourseData(Instructor instructor)
     {
         DbSet<Course> courses = _context.Courses;
+        //ViewBag.Courses = courses;
         HashSet<int> assignedCourses = new HashSet<int>
             (
                 instructor.CourseAssignments.Select(c => c.CourseID)
@@ -138,6 +138,21 @@ public class InstructorsController : Controller
             instructor.CourseAssignments = new List<CourseAssignment>();
             return;
         }
+
+        Course[] allCourses = _context.Courses.ToArray();
+        Course[] courses = new Course[selectedCourses.Length];
+        ICollection <CourseAssignment> courseAssignments = new List<CourseAssignment>();
+
+        for(int i=0; i<courses.Length; i++)
+        {
+            courses[i] = allCourses.Where(c=>c.CourseID.ToString() == selectedCourses[i]).First();
+            courseAssignments.Add(new CourseAssignment { CourseID = courses[i].CourseID, InstructorID = instructor.ID });
+        }
+
+        instructor.CourseAssignments = courseAssignments;
+        //ViewBag.Courses = _context.Courses;
+        return;
+
         HashSet<string> selectedCoursesHS = new HashSet<string>(selectedCourses);
         HashSet<int> instructorCoursesHS = new HashSet<int>
         (
@@ -181,13 +196,15 @@ public class InstructorsController : Controller
    // public async Task<IActionResult> Edit(int? id, [Bind("ID,LastName,FirstName,HireDate,FullName,CourseAssignments,OfficeAssignments")] Instructor instructor)
     public async Task<IActionResult> Edit(int id, string[] selectedCourses)
     {
-        if (id != null)
-        {
-            return NotFound();
-        }
+        //if (id != null)
+        //{
+        //    return NotFound();
+        //}
 
         Instructor instructor = await _context.Instructors
                                    .Include(i => i.OfficeAssignments)
+                                   .Include(i => i.CourseAssignments)
+                                   .ThenInclude(ca=>ca.Course)
                                    .FirstOrDefaultAsync(i => i.ID == id);
 
         Task<bool> ok = TryUpdateModelAsync<Instructor>
@@ -211,8 +228,8 @@ public class InstructorsController : Controller
             }
             return View(instructor);
         }
-        UpdateInstructorCourses (selectedCourses, instructor);
-        PopulateAssignmendCourseData(instructor);
+        //UpdateInstructorCourses (selectedCourses, instructor);
+        //PopulateAssignmendCourseData(instructor);
         return Redirect($"/instructors/Details/{instructor.ID}");
         return View(instructor);
 

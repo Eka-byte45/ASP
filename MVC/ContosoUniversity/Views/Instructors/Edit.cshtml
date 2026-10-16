@@ -1,7 +1,7 @@
 @model ContosoUniversity.Models.Instructor
 
 @{
-	ViewData["Title"] = "Edit";
+	//ViewData["Title"] = "Edit";
 }
 
 <h1>Edit</h1>
@@ -61,7 +61,9 @@
 						<tr>
 							@{
 								int count = 0;
+								//List<ContosoUniversity.Models.ViewModels.AssignedCourseData> courses = ;
 								List<ContosoUniversity.Models.ViewModels.AssignedCourseData> courses = ViewBag.Courses;
+								if(courses != null)
 								foreach (ContosoUniversity.Models.ViewModels.AssignedCourseData course in courses)
 								{
 									if(count++ %3==0)
@@ -83,7 +85,6 @@
 								}
 								@:</tr>
 							}
-						</tr>
 					</table>
 				</div>
 			</div>
